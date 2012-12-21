@@ -125,7 +125,7 @@ $overlay_class = ( $this->collapsed ) ? ' collapsed' : ' expanded';
 
         </div>
 
-	</div>
+    </div>
 
     <?php do_action ( 'live_admin_after_admin-controls' ); ?>
 

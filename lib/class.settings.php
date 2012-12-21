@@ -20,6 +20,14 @@ if ( ! class_exists ( 'WP_LiveAdmin_Settings' ) ) :
             $this->handle = $handle;
             $this->option_name = $option_name;
             $this->option_description = $option_description;
+
+            // Network defaults have preference over plugin defaults
+            if ( is_multisite() ) {
+                $network_defaults = (array) get_site_option( 'live-admin-defaults' );
+                if ( isset ($network_defaults[$this->handle] ) )
+                    $default = $network_defaults[$this->handle];
+            }
+
             $this->default = $default;
             $this->screen = ( empty ( $screen ) ) ? "$handle.php" : $screen;
 
@@ -46,7 +54,7 @@ if ( ! class_exists ( 'WP_LiveAdmin_Settings' ) ) :
             $settings = array ( $this->handle => $this->default );
 
             if ( is_array ( $current_user_settings ) )
-                $settings = array_merge ( $settings, $current_user_settings );
+                $settings = shortcode_atts ( $settings, $current_user_settings );
 
             update_user_meta ( $user_id, 'live-admin', $settings );
 
@@ -63,7 +71,7 @@ if ( ! class_exists ( 'WP_LiveAdmin_Settings' ) ) :
         }
 
             /**
-             * Retreives and sets class vars for current user settings, sets defaults if necessary
+             * Retrieves and sets class vars for current user settings, sets defaults if necessary
              *
              * @uses apply_filters 'live_admin_user_setting_' . $handle
              * @return mixed The settings
@@ -71,12 +79,8 @@ if ( ! class_exists ( 'WP_LiveAdmin_Settings' ) ) :
             private function current_user_settings() {
                 $current_user_settings = get_user_meta( get_current_user_id(), 'live-admin', true );
 
-                // Is not supposed to happen
-                if ( empty ( $current_user_settings ) || ! is_array ( $current_user_settings ) )
+                if ( empty ( $current_user_settings ) || ! is_array ( $current_user_settings ) || ! isset ( $current_user_settings[$this->handle] ) )
                     $current_user_settings = $this->set_default_settings();
-
-                /*if ( ! isset ( $current_user_settings[$this->handle] ) )
-                    $current_user_settings = $this->set_default_settings( $current_user_settings );*/
 
                 $this->current_user_settings = $current_user_settings;
                 $this->current_user_setting = $current_user_settings[$this->handle];
@@ -137,8 +141,11 @@ if ( ! class_exists ( 'WP_LiveAdmin_Settings' ) ) :
 
         protected function actions_and_filters() {
             // Check if live_admin_options has been loaded already
-            if ( ! has_action ( 'live_admin_options' ) )
+            if ( ! has_action ( 'live_admin_options' ) ) {
                 add_action( 'personal_options', array ( &$this, 'add_live_admin_settings' ) );
+                add_action( 'network_admin_menu', array ( &$this, 'add_network_admin_page' ) );
+                add_action('network_admin_edit_live_admin_save', array($this, 'save_network_settings'), 10, 0);
+            }
 
             add_action( 'live_admin_options', array ( &$this, 'add_user_settings' ) );
 
@@ -146,11 +153,56 @@ if ( ! class_exists ( 'WP_LiveAdmin_Settings' ) ) :
             add_action( 'edit_user_profile_update', array ( &$this, 'save_user_settings' ) );
         }
 
+        /**
+         * NETWORK ADMIN
+         */
+        public function add_network_admin_page() {
+            add_submenu_page('settings.php', __('Live Admin Default Settings', 'live-admin'), __('Live Admin', 'live-admin'), 'manage_network', 'live_admin_defaults', array ( &$this, 'network_admin_page' ) );
+        }
+
+            public function network_admin_page() {
+                ?>
+                <div class="wrap">
+                    <?php if ( isset ( $_GET['updated'] ) && $_GET['updated'] ) : ?>
+
+                        <div class="updated">
+                            <p><?php _e('Defaults saved.','live-admin'); ?></p>
+                        </div>
+
+                    <?php elseif ( isset ( $_GET['error'] ) && $_GET['error'] ) : ?>
+
+                        <div class="error">
+                            <p><?php _e('Something went wrong saving your settings, please try again.','live-admin'); ?></p>
+                        </div>
+
+                    <?php endif; ?>
+
+                    <div class="icon32" id="icon-options-general"></div>
+                    <h2><?php _e('Live Admin Default Settings','live-admin'); ?></h2>
+                    <p><?php _e('The settings below will be the default settings for new users in your site network.','live-admin'); ?></p>
+
+                    <form action="edit.php?action=live_admin_save" method="post">
+                        <table class="form-table">
+                            <tbody>
+                            <?php do_action('live_admin_options', 'network'); ?>
+                            </tbody>
+                        </table>
+                        <p class="submit">
+                            <input name="Submit" type="submit" class="button-primary" value="<?php esc_attr_e('Save Changes','live-admin'); ?>" />
+                        </p>
+                    </form>
+                </div>
+                <?php
+            }
+
+        /**
+         * USER PROFILES
+         */
         public function add_live_admin_settings( $profileuser ) {
             ?>
                 </tbody>
             </table>
-            <h3>Live Admin</h3>
+            <h3><?php _e('Live Admin','live-admin'); ?></h3>
             <table class="form-table">
                 <tbody>
             <?php
@@ -158,7 +210,10 @@ if ( ! class_exists ( 'WP_LiveAdmin_Settings' ) ) :
         }
 
         public function add_user_settings( $profileuser ) {
-            $displayed_user_settings = get_user_meta( $profileuser->ID, 'live-admin', true );
+            $displayed_user_settings = ( $profileuser == 'network' ) ? (array) get_site_option( 'live-admin-defaults' ) : (array) get_user_meta( $profileuser->ID, 'live-admin', true );
+            if ( ! isset ( $displayed_user_settings[$this->handle] ) )
+                $displayed_user_settings[$this->handle] = $this->default;
+
             $current_setting = $displayed_user_settings[$this->handle];
             ?>
             <tr>
@@ -174,6 +229,22 @@ if ( ! class_exists ( 'WP_LiveAdmin_Settings' ) ) :
             <?php
         }
 
+        public function save_network_settings() {
+            // Make sure this only happens once
+            if ( defined('LIVE_ADMIN_SAVED' ) && LIVE_ADMIN_SAVED )
+                return;
+
+            define ( 'LIVE_ADMIN_SAVED', true );
+
+            if ( $options = $this->process_settings_post() ) {
+                update_site_option ('live-admin-defaults', $options);
+                wp_redirect(add_query_arg(array('page' => 'live_admin_defaults', 'updated' => 'true'), network_admin_url('settings.php')));
+            } else {
+                wp_redirect(add_query_arg(array('page' => 'live_admin_defaults', 'error' => 'true'), network_admin_url('settings.php')));
+            }
+            exit();
+        }
+
         /**
          * Save all Live Admin user settings at once
          */
@@ -185,6 +256,12 @@ if ( ! class_exists ( 'WP_LiveAdmin_Settings' ) ) :
             define ( 'LIVE_ADMIN_SAVED', true );
 
             $user_id = get_current_user_id();
+
+            if ( $options = $this->process_settings_post() )
+                update_user_meta ( $user_id, 'live-admin', $options );
+        }
+
+        protected function process_settings_post() {
             $settings = $_POST['live_admin'];
             $options = $_POST['live_admin_options'];
 
@@ -196,8 +273,7 @@ if ( ! class_exists ( 'WP_LiveAdmin_Settings' ) ) :
                 if ( isset ( $settings[$option] ) )
                     $value = $settings[$option];
             }
-
-            update_user_meta ( $user_id, 'live-admin', $options );
+            return $options;
         }
 
         public function save_user_setting( $setting_key, $setting_value, $user_id = false ) {
