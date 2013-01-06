@@ -108,7 +108,7 @@ class WP_LiveAdmin
             $this->actions_and_filters();
 
             if ( empty ( $this->iframe_url ) )
-                $this->iframe_url = get_bloginfo('url');
+                $this->iframe_url = get_bloginfo('wpurl');
 
             if ( $this->menu )
                 require_once ( LIVE_ADMIN_DIR . 'live-menu/live-menu.php' );
