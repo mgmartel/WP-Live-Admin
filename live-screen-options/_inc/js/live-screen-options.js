@@ -47,10 +47,18 @@ var postboxes;
 		pbhide : false
 	};
 
-}(jQuery));
 
-jQuery(document).ready( function ($) {
-    $('.toggle-screen-options').click( function() {
-        $('#live-admin-screen-options').toggleClass( 'expanded' ).toggleClass( 'collapsed' );
+    $(document).ready( function ($) {
+        $('.toggle-screen-options').click( function() {
+            toggleLiveScreenOptions();
+        });
+        $.hotkeys.add('s', { disableInInput: true, propagate: true }, function() {
+            toggleLiveScreenOptions();
+        });
     });
-});
+
+    function toggleLiveScreenOptions() {
+        $('#live-admin-screen-options').toggleClass( 'expanded' ).toggleClass( 'collapsed' );
+
+    }
+}(jQuery));

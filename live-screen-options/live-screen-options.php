@@ -40,10 +40,11 @@ if ( !class_exists ( 'WP_LiveAdmin_LiveScreenOptions' ) ) :
         }
 
         public function __construct() {
-            wp_enqueue_script('live-screen-options', LIVE_SCREEN_OPTIONS_INC_URL . 'js/live-screen-options.js', array ('jquery', 'common'), 0.1, true );
+            wp_enqueue_script ( 'jquery-hotkeys' );
+            wp_enqueue_script('live-screen-options', LIVE_SCREEN_OPTIONS_INC_URL . 'js/live-screen-options.js', array ('jquery', 'jquery-hotkeys', 'common'), LIVE_ADMIN_VERSION, true );
             wp_dequeue_script('postbox');
 
-            wp_enqueue_style('live-screen-options', LIVE_SCREEN_OPTIONS_INC_URL . 'css/live-screen-options.css', array('customize-controls'), 0.1 );
+            wp_enqueue_style('live-screen-options', LIVE_SCREEN_OPTIONS_INC_URL . 'css/live-screen-options.css', array('customize-controls'), LIVE_ADMIN_VERSION );
 
             add_action ( 'live_admin_before_wpwrap', array ( &$this, 'load_screen_options' ) );
 
