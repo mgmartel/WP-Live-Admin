@@ -14,6 +14,7 @@ jQuery(document).ready( function($) {
 
         // Save state?
         // @TODO also remember metabox state
+        // @TODO open metabox when it's hashed!
         if ( rememberSidebarState ) {
             $.post(ajaxurl, {
                 action:                 'live-admin-save-sidebar-state',
@@ -33,7 +34,7 @@ jQuery(document).ready( function($) {
     // Temporary accordeon
     $( '.customize-section' ).not( clicked ).removeClass( 'open' );
         clicked.toggleClass( 'open' );
-        event.preventDefault();
+        //event.preventDefault();
     });
 
 });
