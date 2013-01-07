@@ -68,7 +68,6 @@ jQuery(document).ready(function($) {
 
         // Fade iFrame in onload
         iframe.load(function() {
-            // Make sure admin links take over the window instead of the iFrame
             iframe.contents().find('a').click( function(e) {
                 if ( disableNavigation ) {
                     e.preventDefault();
@@ -76,6 +75,12 @@ jQuery(document).ready(function($) {
                     return;
                 }
 
+                // Force loading of external links in new window
+                if(this.href.indexOf(location.hostname) == -1) {
+                    $(this).attr('target', '_blank');
+                }
+
+                // Make sure admin links take over the window instead of the iFrame
                 if ( e.target.href.indexOf( 'wp-admin' ) != -1  ) {
                     e.stopPropagation(); e.preventDefault();
                     window.location.href = e.target;
