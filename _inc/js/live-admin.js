@@ -4,7 +4,12 @@ jQuery(document).ready( function($) {
     var body = $( document.body ),
         overlay = body.children('.wp-full-overlay');
 
-    $('.collapse-sidebar').click( function( event ) {
+    $('.collapse-sidebar').click( function( e ) {
+        e.preventDefault;
+        toggleLiveAdminSidebar();
+    });
+
+    function toggleLiveAdminSidebar() {
         overlay.toggleClass( 'collapsed' ).toggleClass( 'expanded' );
 
         // Save state?
@@ -17,9 +22,7 @@ jQuery(document).ready( function($) {
                 handle:                 handle
             });
         }
-
-        event.preventDefault();
-    });
+    }
 
     $('.customize-section-title').click( function( event ) {
         var clicked = $( this ).parents( '.customize-section' );
