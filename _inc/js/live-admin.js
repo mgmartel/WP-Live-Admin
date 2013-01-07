@@ -1,3 +1,5 @@
+// @TODO Don't follow external links..
+
 // Customizer
 jQuery(document).ready( function($) {
     // Sidebar collpase
@@ -124,4 +126,45 @@ function liveAdmin_getSidebarState() {
     if ( overlay.hasClass('expanded') )
         return 'expanded';
     else return 'collapsed';
+}
+
+function liveAdmin_addQueryParam(key, value, url) {
+    if (!url) url = window.location.href;
+    var re = new RegExp("([?|&])" + key + "=.*?(&|#|$)", "gi");
+
+    if (url.match(re)) {
+        if (value)
+            return url.replace(re, '$1' + key + "=" + value + '$2');
+        else
+            return url.replace(re, '$2');
+    }
+    else {
+        if (value) {
+            var separator = url.indexOf('?') !== -1 ? '&' : '?',
+                hash = url.split('#');
+            url = hash[0] + separator + key + '=' + value;
+            if (hash[1]) url += '#' + hash[1];
+            return url;
+        }
+        else
+            return url;
+    }
+}
+
+function liveAdmin_addCurrentPageParam(link, current_page) {
+    if (!current_page) current_page = jQuery('.wp-full-overlay-main iframe').contents().get(0).location.href;
+
+    // Is it an admin url? If so, refuse!
+    if ( current_page.indexOf(liveDashboardLinks.admin_url) !== -1 )
+        return;
+
+    if ( current_page.indexOf(liveDashboardLinks.site_url) !== -1 ) {
+        // Siteurl is still in there
+        var site_url_length = liveDashboardLinks.site_url.length;
+        current_page = current_page.substr( site_url_length );
+    }
+
+    link = liveAdmin_addQueryParam('current-page', encodeURIComponent(current_page), link);
+
+    return link;
 }
