@@ -14,7 +14,6 @@ jQuery(document).ready( function($) {
 
         // Save state?
         // @TODO also remember metabox state
-        // @TODO open metabox when it's hashed!
         if ( rememberSidebarState ) {
             $.post(ajaxurl, {
                 action:                 'live-admin-save-sidebar-state',
@@ -36,6 +35,25 @@ jQuery(document).ready( function($) {
         clicked.toggleClass( 'open' );
         //event.preventDefault();
     });
+
+    // Open metabox based on hash
+    if ( window.location.hash ) {
+        open_metabox ( window.location.hash.substring(1) );
+    }
+
+    function open_metabox( id ) {
+        var metabox = $('li#' + id);
+        if ( metabox.get(0) ) {
+
+            if ( metabox.hasClass('cannot-expand') )
+                return;
+
+            // Temporary accordeon
+            $( '.customize-section' ).not( metabox ).removeClass( 'open' );
+                metabox.toggleClass( 'open' );
+                //event.preventDefault();
+        }
+    }
 
 });
 
