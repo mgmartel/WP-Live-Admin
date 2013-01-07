@@ -11,11 +11,15 @@ jQuery(document).ready( function($) {
     // Menu
     $('.toggle-menu').click( function( e ) {
         toggleLiveMenu(e);
+        e.preventDefault();
     });
 
-    function toggleLiveMenu(e) {
+    $.hotkeys.add('m', { disableInInput: true, propagate: true }, function() {
+        toggleLiveMenu();
+    });
+
+    function toggleLiveMenu() {
         $('.wp-full-overlay-sidebar').toggleClass( 'collapsed' ).toggleClass( 'expanded' );
         $("#adminmenuback, #adminmenuwrap").toggleClass( 'collapsed' ).toggleClass( 'expanded' );
-        e.preventDefault();
     }
 });
