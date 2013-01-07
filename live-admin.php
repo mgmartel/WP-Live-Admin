@@ -12,7 +12,7 @@ if ( defined ( 'LIVE_ADMIN_VERSION' ) )
  *
  * @since 0.1
  */
-define ( 'LIVE_ADMIN_VERSION', '0.1' );
+define ( 'LIVE_ADMIN_VERSION', '0.2' );
 
 /**
  * PATHs and URLs
@@ -141,8 +141,8 @@ class WP_LiveAdmin
         }
 
         private function enqueue_live_admin_styles_and_scripts() {
-            wp_enqueue_script( 'live-admin', LIVE_ADMIN_INC_URL . 'js/live-admin.js', array ( 'jquery' ), 0.1 );
-            wp_enqueue_style( 'live-admin', LIVE_ADMIN_INC_URL . 'css/live-admin.css', array ( 'customize-controls'), 0.1 );
+            wp_enqueue_script( 'live-admin', LIVE_ADMIN_INC_URL . 'js/live-admin.js', array ( 'jquery' ), LIVE_ADMIN_VERSION );
+            wp_enqueue_style( 'live-admin', LIVE_ADMIN_INC_URL . 'css/live-admin.css', array ( 'customize-controls'), LIVE_ADMIN_VERSION );
 
             if ( ! empty ( $this->custom_js_vars ) )
                 wp_localize_script ( 'live-admin', 'liveAdmin', $this->custom_js_vars );
