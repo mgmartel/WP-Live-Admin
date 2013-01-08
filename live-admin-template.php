@@ -70,6 +70,7 @@ overrideIFrameLoader = <?php echo ( $this->override_iframe_loader ) ? 'true' : '
 disableNavigation = <?php echo ( $this->disable_nav ) ? 'true' : 'false'; ?>,
 disableListeners = <?php echo ( $this->disable_listeners ) ? 'true' : 'false'; ?>,
 rememberSidebarState = <?php echo ( $this->remember_sidebar_state ) ? 'true' : 'false'; ?>;
+allowSameDomainLinks = <?php echo ( $this->allow_same_domain_links ) ? 'true' : 'false'; ?>;
 </script><?php
 do_action( "admin_print_styles-$handle" );
 do_action( "admin_print_scripts-$handle" );

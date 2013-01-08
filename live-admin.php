@@ -80,6 +80,12 @@ class WP_LiveAdmin
                             = false,
 
             /**
+             * Allow browsing to links on the same domain (don't open in new window)
+             */
+            $allow_same_domain_links
+                            = false,
+
+            /**
              * Remember the sidebar state (collapsed|expanded)
              */
             $remember_sidebar_state

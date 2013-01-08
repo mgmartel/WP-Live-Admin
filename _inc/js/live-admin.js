@@ -75,15 +75,15 @@ jQuery(document).ready(function($) {
 
                 // Force loading of external links in new window
                 var openInNewWindow = window.location.hostname;
-                if ( allowSameDomainBrowsing ) {
+                if ( allowSameDomainLinks ) {
                     var domainParts = window.location.hostname.split(".");
-                    var openInNewWindow = domainParts[domainParts.length - 2] + '.' + domainParts[domainParts.length - 1];
+                    openInNewWindow = domainParts[domainParts.length - 2] + '.' + domainParts[domainParts.length - 1];
                 }
 
                 if(this.href.indexOf(openInNewWindow) == -1) {
                     $(this).attr('target', '_blank');
                 }
-
+                
                 // Make sure admin links take over the window instead of the iFrame
                 if ( e.target.href.indexOf( 'wp-admin' ) != -1  ) {
                     e.stopPropagation(); e.preventDefault();
