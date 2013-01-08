@@ -60,14 +60,17 @@ pagenow = '<?php echo $current_screen->id; ?>',
 typenow = '<?php echo $current_screen->post_type; ?>',
 thousandsSeparator = '<?php echo addslashes( $wp_locale->number_format['thousands_sep'] ); ?>',
 decimalPoint = '<?php echo addslashes( $wp_locale->number_format['decimal_point'] ); ?>',
-isRtl = <?php echo (int) is_rtl(); ?>;
-iframeUrl = "<?php echo $this->iframe_url; ?>";
+isRtl = <?php echo (int) is_rtl(); ?>,
+iframeUrl = "<?php echo $this->iframe_url; ?>",
 handle = '<?php echo $GLOBALS['pagenow'] ?>',
+site_url = '<?php echo get_bloginfo('wpurl')?>',
+admin_url = '<?php echo admin_url() ?>',
 
-overrideIFrameLoader = <?php echo ( $this->override_iframe_loader ) ? 'true' : 'false'; ?>;
-disableNavigation = <?php echo ( $this->disable_nav ) ? 'true' : 'false'; ?>;
-disableListeners = <?php echo ( $this->disable_listeners ) ? 'true' : 'false'; ?>;
+overrideIFrameLoader = <?php echo ( $this->override_iframe_loader ) ? 'true' : 'false'; ?>,
+disableNavigation = <?php echo ( $this->disable_nav ) ? 'true' : 'false'; ?>,
+disableListeners = <?php echo ( $this->disable_listeners ) ? 'true' : 'false'; ?>,
 rememberSidebarState = <?php echo ( $this->remember_sidebar_state ) ? 'true' : 'false'; ?>;
+allowSameDomainLinks = <?php echo ( $this->allow_same_domain_links ) ? 'true' : 'false'; ?>;
 </script><?php
 do_action( "admin_print_styles-$handle" );
 do_action( "admin_print_scripts-$handle" );

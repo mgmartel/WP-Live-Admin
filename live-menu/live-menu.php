@@ -47,8 +47,9 @@ if ( !class_exists ( 'WP_LiveAdmin_LiveMenu' ) ) :
         public function __construct() {
             global $live_admin;
 
-            wp_enqueue_script('live-menu', LIVE_MENU_INC_URL . 'js/live-menu.js', array ('jquery', 'common'), 0.1 );
-            wp_enqueue_style('live-menu', LIVE_MENU_INC_URL . 'css/live-menu.css', array('customize-controls'), 0.1 );
+            wp_enqueue_script ( 'jquery-hotkeys' );
+            wp_enqueue_script('live-menu', LIVE_MENU_INC_URL . 'js/live-menu.js', array ('jquery', 'jquery-hotkeys', 'common'), LIVE_ADMIN_VERSION, true );
+            wp_enqueue_style('live-menu', LIVE_MENU_INC_URL . 'css/live-menu.css', array('customize-controls'), LIVE_ADMIN_VERSION );
 
             add_action ( 'live_admin_before_wpwrap', array ( &$this, 'load_admin_menu_header' ) );
 

@@ -12,7 +12,7 @@ if ( defined ( 'LIVE_ADMIN_VERSION' ) )
  *
  * @since 0.1
  */
-define ( 'LIVE_ADMIN_VERSION', '0.1' );
+define ( 'LIVE_ADMIN_VERSION', '0.2.1' );
 
 /**
  * PATHs and URLs
@@ -80,6 +80,12 @@ class WP_LiveAdmin
                             = false,
 
             /**
+             * Allow browsing to links on the same domain (don't open in new window)
+             */
+            $allow_same_domain_links
+                            = false,
+
+            /**
              * Remember the sidebar state (collapsed|expanded)
              */
             $remember_sidebar_state
@@ -108,7 +114,7 @@ class WP_LiveAdmin
             $this->actions_and_filters();
 
             if ( empty ( $this->iframe_url ) )
-                $this->iframe_url = get_bloginfo('url');
+                $this->iframe_url = get_bloginfo('wpurl');
 
             if ( $this->menu )
                 require_once ( LIVE_ADMIN_DIR . 'live-menu/live-menu.php' );
@@ -141,8 +147,8 @@ class WP_LiveAdmin
         }
 
         private function enqueue_live_admin_styles_and_scripts() {
-            wp_enqueue_script( 'live-admin', LIVE_ADMIN_INC_URL . 'js/live-admin.js', array ( 'jquery' ), 0.1 );
-            wp_enqueue_style( 'live-admin', LIVE_ADMIN_INC_URL . 'css/live-admin.css', array ( 'customize-controls'), 0.1 );
+            wp_enqueue_script( 'live-admin', LIVE_ADMIN_INC_URL . 'js/live-admin.js', array ( 'jquery' ), LIVE_ADMIN_VERSION );
+            wp_enqueue_style( 'live-admin', LIVE_ADMIN_INC_URL . 'css/live-admin.css', array ( 'customize-controls'), LIVE_ADMIN_VERSION );
 
             if ( ! empty ( $this->custom_js_vars ) )
                 wp_localize_script ( 'live-admin', 'liveAdmin', $this->custom_js_vars );

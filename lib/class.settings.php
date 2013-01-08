@@ -142,7 +142,7 @@ if ( ! class_exists ( 'WP_LiveAdmin_Settings' ) ) :
         protected function actions_and_filters() {
             // Check if live_admin_options has been loaded already
             if ( ! has_action ( 'live_admin_options' ) ) {
-                add_action( 'personal_options', array ( &$this, 'add_live_admin_settings' ) );
+                add_action( 'personal_options', array ( &$this, 'add_live_admin_settings' ), 99 );
                 add_action( 'network_admin_menu', array ( &$this, 'add_network_admin_page' ) );
                 add_action('network_admin_edit_live_admin_save', array($this, 'save_network_settings'), 10, 0);
             }
