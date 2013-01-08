@@ -1,5 +1,3 @@
-// @TODO Don't follow external links..
-
 // Customizer
 jQuery(document).ready( function($) {
     // Sidebar collpase
@@ -7,7 +5,7 @@ jQuery(document).ready( function($) {
         overlay = body.children('.wp-full-overlay');
 
     $('.collapse-sidebar').click( function( e ) {
-        e.preventDefault;
+        e.preventDefault();
         toggleLiveAdminSidebar();
     });
 
@@ -76,7 +74,13 @@ jQuery(document).ready(function($) {
                 }
 
                 // Force loading of external links in new window
-                if(this.href.indexOf(location.hostname) == -1) {
+                var openInNewWindow = window.location.hostname;
+                if ( allowSameDomainBrowsing ) {
+                    var domainParts = window.location.hostname.split(".");
+                    var openInNewWindow = domainParts[domainParts.length - 2] + '.' + domainParts[domainParts.length - 1];
+                }
+
+                if(this.href.indexOf(openInNewWindow) == -1) {
                     $(this).attr('target', '_blank');
                 }
 
@@ -160,12 +164,12 @@ function liveAdmin_addCurrentPageParam(link, current_page) {
     if (!current_page) current_page = jQuery('.wp-full-overlay-main iframe').contents().get(0).location.href;
 
     // Is it an admin url? If so, refuse!
-    if ( current_page.indexOf(liveDashboardLinks.admin_url) !== -1 )
-        return;
+    if ( current_page.indexOf(admin_url) !== -1 )
+        return link;
 
-    if ( current_page.indexOf(liveDashboardLinks.site_url) !== -1 ) {
+    if ( current_page.indexOf(site_url) !== -1 ) {
         // Siteurl is still in there
-        var site_url_length = liveDashboardLinks.site_url.length;
+        var site_url_length = site_url.length;
         current_page = current_page.substr( site_url_length );
     }
 
