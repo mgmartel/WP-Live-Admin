@@ -29,7 +29,10 @@ if ( ! class_exists ( 'WP_LiveAdmin_Settings' ) ) :
             }
 
             $this->default = $default;
-            $this->screen = ( empty ( $screen ) ) ? "$handle.php" : $screen;
+            if ( is_array ( $screen ) )
+                $this->screen = $screen;
+            else
+                $this->screen = array ( ( empty ( $screen ) ) ? "$handle.php" : $screen );
 
             $this->current_user_settings();
             $this->actions_and_filters();
@@ -111,7 +114,7 @@ if ( ! class_exists ( 'WP_LiveAdmin_Settings' ) ) :
                 return $this->is_active;
 
             global $pagenow;
-            if ( $pagenow != $this->screen )
+            if ( ! in_array ( $pagenow, $this->screen ) )
                 return $this->is_active = false;
 
             // We are at the right page, let's globalize Live Admin settings for use in our live admin interface
