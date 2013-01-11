@@ -187,3 +187,7 @@ function liveAdmin_addCurrentPageParam(link, current_page) {
 
     return link;
 }
+
+function liveAdmin_isExpanded() {
+    return jQuery('.wp-full-overlay').hasClass('expanded');
+}
