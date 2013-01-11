@@ -22,9 +22,9 @@ jQuery(document).ready( function($) {
             adminbar_wp_logo_contents = adminbar_wp_logo.html();
 
         // Set Adminbar toggle
-        toggleAdminBarToggle ( $('.wp-full-overlay').hasClass('expanded') );
+        toggleAdminBarToggle ( liveAdmin_isExpanded() );
         $('.collapse-sidebar').click( function() {
-            toggleAdminBarToggle ( $('.wp-full-overlay').hasClass('expanded') );
+            toggleAdminBarToggle ( liveAdmin_isExpanded() );
         });
 
         function toggleAdminBarToggle( hasClassExpanded ) {
@@ -42,7 +42,7 @@ jQuery(document).ready( function($) {
 
 
     $.hotkeys.add('m', { disableInInput: true, propagate: true }, function() {
-        toggleLiveMenu();
+            toggleLiveMenu();
     });
 
     function toggleLiveMenu() {
