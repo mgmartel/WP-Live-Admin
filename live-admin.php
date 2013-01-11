@@ -256,7 +256,8 @@ class WP_LiveAdmin
         }
 
         public function pointers() {
-            new WP_Help_Pointer($this->pointers);
+            $pointers = apply_filters( 'live_admin_pointers', $this->pointers );
+            new WP_Help_Pointer($pointers);
         }
 
 
