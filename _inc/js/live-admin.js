@@ -40,6 +40,10 @@ jQuery(document).ready( function($) {
     if ( window.location.hash ) {
         open_metabox ( window.location.hash.substring(1) );
     }
+    $(window).bind('hashchange', function() {
+        open_metabox ( window.location.hash.substring(1) );
+        $('.wp-full-overlay-sidebar-content').scrollTop($( window.location.hash ).offset().top);
+    });
 
     function open_metabox( id ) {
         var metabox = $('li#' + id);
@@ -51,7 +55,6 @@ jQuery(document).ready( function($) {
             // Temporary accordeon
             $( '.customize-section' ).not( metabox ).removeClass( 'open' );
                 metabox.toggleClass( 'open' );
-                //event.preventDefault();
         }
     }
 
