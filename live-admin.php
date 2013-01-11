@@ -34,6 +34,12 @@ class WP_LiveAdmin
 {
         var $info_notice    = '',
             $info_content   = '',
+
+            /**
+             * Admin notice
+             */
+            $admin_notice   = '',
+                
             /**
              * First url for the iframe
              */
@@ -159,8 +165,7 @@ class WP_LiveAdmin
 
             add_action ( 'live_admin_buttons', array ( &$this, 'do_buttons' ), 15 );
 
-            if ( ! empty ( $this->info_notice ) )
-                add_action ( 'live_admin_info', array ( &$this, 'do_info' ) );
+            add_action ( 'live_admin_info', array ( &$this, 'do_info' ) );
 
             if ( ! empty ( $this->pointers ) )
                 add_action('live_admin_init', array (&$this, 'pointers' ) );
@@ -201,6 +206,7 @@ class WP_LiveAdmin
         public function do_info() {
             ?>
             <div id="live-admin-info" class="customize-section open">
+                <?php if ( ! empty ( $this->info_notice ) ) : ?>
                 <div class="customize-section-title" aria-label="<?php esc_attr_e( 'Live Admin', 'live-admin' ); ?>" tabindex="0">
                     <span class="preview-notice">
 
@@ -221,6 +227,7 @@ class WP_LiveAdmin
                     </div>
 
                 <?php endif; ?>
+                <?php endif;?>
 
                 <?php if ( ! $this->disable_admin_notices ) : ?>
 
@@ -242,6 +249,9 @@ class WP_LiveAdmin
                     do_action('admin_notices');
 
             do_action('all_admin_notices');
+
+            if ( !empty ( $this->admin_notice ) )
+                echo $this->admin_notice;
         }
 
         public function pointers() {
