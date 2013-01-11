@@ -75,7 +75,8 @@ jQuery(document).ready(function($) {
                 });
             }
 
-            iframe.contents().find('a').click( function(e) {
+            iframe.contents().on('click', 'a', function(e) {
+
                 if ( disableNavigation ) {
                     e.preventDefault();
                     e.stopPropagation();
@@ -94,9 +95,9 @@ jQuery(document).ready(function($) {
                 }
 
                 // Make sure admin links take over the window instead of the iFrame
-                if ( e.target.href.indexOf( 'wp-admin' ) != -1  ) {
+                if ( this.href.indexOf( 'wp-admin' ) != -1  ) {
                     e.stopPropagation(); e.preventDefault();
-                    window.location.href = e.target;
+                    window.location.href = this.href;
                 }
             })
 
