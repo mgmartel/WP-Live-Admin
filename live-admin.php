@@ -29,6 +29,7 @@ define ( 'LIVE_ADMIN_INC_URL', LIVE_ADMIN_URL . '_inc/' );
 require_once ( LIVE_ADMIN_DIR . 'functions.php' );
 require_once ( LIVE_ADMIN_DIR . 'live-admin-ajax.php' );
 require_once ( LIVE_ADMIN_DIR . 'lib/class.settings.php' );
+require_once ( LIVE_ADMIN_DIR . 'lib/class.wp-help-pointers.php' );
 
 class WP_LiveAdmin
 {
@@ -39,7 +40,7 @@ class WP_LiveAdmin
              * Admin notice
              */
             $admin_notice   = '',
-                
+
             /**
              * First url for the iframe
              */
@@ -255,7 +256,6 @@ class WP_LiveAdmin
         }
 
         public function pointers() {
-            require_once ( LIVE_ADMIN_DIR . 'lib/class.wp-help-pointers.php' );
             new WP_Help_Pointer($this->pointers);
         }
 
