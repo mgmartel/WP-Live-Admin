@@ -1,7 +1,9 @@
 <?php
+global $title, $current_screen, $current_user, $wp_locale, $handle;
 define('IFRAME_REQUEST', true);
 
 do_action( 'live_admin_start');
+do_action( "live_admin_start-$handle");
 
 add_action( 'live_admin_print_scripts',        'print_head_scripts', 20 );
 add_action( 'live_admin_print_footer_scripts', '_wp_footer_scripts'     );
@@ -9,7 +11,6 @@ add_action( 'live_admin_print_styles',         'print_admin_styles', 20 );
 
 do_action( 'live_admin_init' );
 
-//wp_enqueue_script( 'customize-controls' );
 wp_enqueue_style( 'customize-controls' );
 
 do_action( 'live_admin_enqueue_scripts' );
@@ -38,8 +39,6 @@ if ( is_rtl() )
 	$body_class .=  ' rtl';
 $body_class .= ' locale-' . sanitize_html_class( strtolower( str_replace( '_', '-', get_locale() ) ) );
 
-global $title, $current_screen, $current_user, $wp_locale, $handle;
-
 if ( empty( $current_screen ) )
 	set_current_screen();
 
@@ -61,7 +60,7 @@ typenow = '<?php echo $current_screen->post_type; ?>',
 thousandsSeparator = '<?php echo addslashes( $wp_locale->number_format['thousands_sep'] ); ?>',
 decimalPoint = '<?php echo addslashes( $wp_locale->number_format['decimal_point'] ); ?>',
 isRtl = <?php echo (int) is_rtl(); ?>,
-iframeUrl = "<?php echo $this->iframe_url; ?>",
+iframeUrl = "<?php echo apply_filters( 'live_admin_iframe_url', $this->iframe_url ); ?>",
 handle = '<?php echo $GLOBALS['pagenow'] ?>',
 site_url = '<?php echo get_bloginfo('wpurl')?>',
 admin_url = '<?php echo admin_url() ?>',
