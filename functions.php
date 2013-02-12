@@ -24,7 +24,8 @@ function live_admin_load ( $param ) {
     elseif ( ! $is_default )
         $this->active = ( $is_activated );
 
-    return apply_filters ( 'live_editor_is_active', &$this->active );
+    $this->active = apply_filters ( 'live_admin_is_active', $this->active );
+    return $this->active;
 }
 
 /*

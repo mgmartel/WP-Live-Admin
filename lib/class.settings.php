@@ -88,7 +88,7 @@ if ( ! class_exists ( 'WP_LiveAdmin_Settings' ) ) :
                 $this->current_user_settings = $current_user_settings;
                 $this->current_user_setting = $current_user_settings[$this->handle];
 
-                return apply_filters( 'live_admin_user_setting_' . $handle, $this->current_user_setting );
+                return apply_filters( 'live_admin_user_setting_' . $this->handle, $this->current_user_setting );
             }
 
         /**
@@ -106,7 +106,7 @@ if ( ! class_exists ( 'WP_LiveAdmin_Settings' ) ) :
 
             $this->is_default = ( $this->current_user_setting == 'true' ) ? true : false;
 
-            return apply_filters ( 'live_admin_is_default-' . $handle, &$this->is_default );
+            return apply_filters ( 'live_admin_is_default-' . $this->handle, &$this->is_default );
         }
 
         public function is_active () {
@@ -130,7 +130,7 @@ if ( ! class_exists ( 'WP_LiveAdmin_Settings' ) ) :
             elseif ( ! $is_default )
                 $this->is_active = ( $is_activated );
 
-            return apply_filters ( 'live_admin_is_active-' . $handle, &$this->is_active );
+            return apply_filters ( 'live_admin_is_active-' . $this->handle, &$this->is_active );
         }
 
         public function is_activated() {

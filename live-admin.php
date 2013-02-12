@@ -103,6 +103,8 @@ class WP_LiveAdmin
              */
             $custom_js_vars = array(),
 
+            $handle = '',
+
             /**
              * Minimum user capability
              */
