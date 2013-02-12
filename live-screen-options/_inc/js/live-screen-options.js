@@ -53,7 +53,7 @@ var postboxes;
             toggleLiveScreenOptions();
         });
         $.hotkeys.add('s', { disableInInput: true, propagate: true }, function() {
-            toggleLiveScreenOptions();
+            if ( liveAdmin_isExpanded() ) toggleLiveScreenOptions();
         });
     });
 

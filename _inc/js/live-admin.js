@@ -40,6 +40,10 @@ jQuery(document).ready( function($) {
     if ( window.location.hash ) {
         open_metabox ( window.location.hash.substring(1) );
     }
+    $(window).bind('hashchange', function() {
+        open_metabox ( window.location.hash.substring(1) );
+        $('.wp-full-overlay-sidebar-content').scrollTop($( window.location.hash ).offset().top);
+    });
 
     function open_metabox( id ) {
         var metabox = $('li#' + id);
@@ -51,7 +55,6 @@ jQuery(document).ready( function($) {
             // Temporary accordeon
             $( '.customize-section' ).not( metabox ).removeClass( 'open' );
                 metabox.toggleClass( 'open' );
-                //event.preventDefault();
         }
     }
 
@@ -66,7 +69,14 @@ jQuery(document).ready(function($) {
 
         // Fade iFrame in onload
         iframe.load(function() {
-            iframe.contents().find('a').click( function(e) {
+            if ( disableNavigation ) {
+                iframe.contents().find('form').on( 'submit', function(e) {
+                    e.preventDefault();
+                });
+            }
+
+            iframe.contents().on('click', 'a', function(e) {
+
                 if ( disableNavigation ) {
                     e.preventDefault();
                     e.stopPropagation();
@@ -83,11 +93,11 @@ jQuery(document).ready(function($) {
                 if(this.href.indexOf(openInNewWindow) == -1) {
                     $(this).attr('target', '_blank');
                 }
-                
+
                 // Make sure admin links take over the window instead of the iFrame
-                if ( e.target.href.indexOf( 'wp-admin' ) != -1  ) {
+                if ( this.href.indexOf( 'wp-admin' ) != -1  ) {
                     e.stopPropagation(); e.preventDefault();
-                    window.location.href = e.target;
+                    window.location.href = this.href;
                 }
             })
 
@@ -176,4 +186,8 @@ function liveAdmin_addCurrentPageParam(link, current_page) {
     link = liveAdmin_addQueryParam('current-page', encodeURIComponent(current_page), link);
 
     return link;
+}
+
+function liveAdmin_isExpanded() {
+    return jQuery('.wp-full-overlay').hasClass('expanded');
 }

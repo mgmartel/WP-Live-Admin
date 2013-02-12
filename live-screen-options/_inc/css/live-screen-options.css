@@ -1,6 +1,7 @@
 #live-admin-screen-options {
     width: 300px;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
     z-index: 100;
     float: left;
     background: #f5f5f5;
