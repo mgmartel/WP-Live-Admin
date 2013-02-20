@@ -12,7 +12,7 @@ if ( defined ( 'LIVE_ADMIN_VERSION' ) )
  *
  * @since 0.1
  */
-define ( 'LIVE_ADMIN_VERSION', '0.2.2' );
+define ( 'LIVE_ADMIN_VERSION', '0.2.3' );
 
 /**
  * PATHs and URLs
