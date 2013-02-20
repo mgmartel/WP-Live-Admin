@@ -106,7 +106,8 @@ if ( ! class_exists ( 'WP_LiveAdmin_Settings' ) ) :
 
             $this->is_default = ( $this->current_user_setting == 'true' ) ? true : false;
 
-            return apply_filters ( 'live_admin_is_default-' . $this->handle, &$this->is_default );
+            $this->is_default  = apply_filters ( 'live_admin_is_default-' . $this->handle, $this->is_default );
+            return $this->is_default;
         }
 
         public function is_active () {
@@ -130,7 +131,8 @@ if ( ! class_exists ( 'WP_LiveAdmin_Settings' ) ) :
             elseif ( ! $is_default )
                 $this->is_active = ( $is_activated );
 
-            return apply_filters ( 'live_admin_is_active-' . $this->handle, &$this->is_active );
+            $this->is_active = apply_filters ( 'live_admin_is_active-' . $this->handle, $this->is_active );
+            return $this->is_active;
         }
 
         public function is_activated() {
